@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using UDCTestTask.Core.Interfaces.Repositories.Based;
 using UDCTestTask.Core.Interfaces.Repositories.Main;
@@ -13,12 +14,13 @@ public class UnitOfWork : IUnitOfWork
 
     public IEmployeeRepository EmployeeRepository { get; }
 
-    public UnitOfWork(TaskApplicationDbContext dbContext, ILoggerFactory loggerFactory)
+    public UnitOfWork(TaskApplicationDbContext dbContext, ILoggerFactory loggerFactory,
+        IMapper mapper)
     {
         ILogger logger = loggerFactory.CreateLogger("logs");
         _applicationDbContext = dbContext;
 
-        EmployeeRepository = new EmployeeRepository(_applicationDbContext, logger);
+        EmployeeRepository = new EmployeeRepository(_applicationDbContext, logger, mapper);
     }
     
     public void SaveChanges()
