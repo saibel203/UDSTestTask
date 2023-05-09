@@ -13,7 +13,7 @@ public class CreateEmployeeInputModel
     public string LastName { get; set; } = string.Empty;
     
     [Required(ErrorMessage = "The 'Gender' field is mandatory")]
-    [StringLength(20, MinimumLength = 5, ErrorMessage = "The length of the field should be from 5 to 20 characters")]
+    [StringLength(7, MinimumLength = 3, ErrorMessage = "The length of the field should be from 3 to 7 characters")]
     public string Gender { get; set; } = string.Empty;
     
     [Required(ErrorMessage = "The 'City' field is mandatory")]

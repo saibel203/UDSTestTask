@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using UDCTestTask.Core.DTOModels.EmployeeDTOs;
 using UDCTestTask.Core.Interfaces.Repositories.Based;
 using UDCTestTask.Core.Models;
+using UDCTestTask.Core.Models.Auxiliary;
 using UDCTestTask.Core.Responses.Repositories;
 using UDCTestTask.WebAPI.InputModels;
 
@@ -24,10 +25,13 @@ public class EmployeeController : ApiController
     {
         EmployeeRepositoryResponse allEmployeesResult =
             await _unitOfWork.EmployeeRepository.GetAllEmployeesAsync();
+        ApiError error = new ApiError();
 
         if (!allEmployeesResult.IsSuccess)
         {
-            return BadRequest(allEmployeesResult);
+            error.ErrorCode = BadRequest().StatusCode;
+            error.ErrorMessage = allEmployeesResult.Message;
+            return BadRequest(error);
         }
 
         IEnumerable<Employee> employees = allEmployeesResult.Employees;
@@ -40,10 +44,13 @@ public class EmployeeController : ApiController
     {
         EmployeeRepositoryResponse getEmployeeResult =
             await _unitOfWork.EmployeeRepository.GetEmployeeByIdAsync(id);
+        ApiError error = new ApiError();
 
         if (!getEmployeeResult.IsSuccess)
         {
-            return NotFound(getEmployeeResult);
+            error.ErrorCode = NotFound().StatusCode;
+            error.ErrorMessage = getEmployeeResult.Message;
+            return NotFound(error);
         }
 
         Employee employee = getEmployeeResult.Employee;
@@ -55,13 +62,16 @@ public class EmployeeController : ApiController
     public async Task<IActionResult> CreateEmployee(CreateEmployeeInputModel employeeInputModel)
     {
         CreateEmployeeDto createEmployeeDto = _mapper.Map<CreateEmployeeDto>(employeeInputModel);
+        ApiError error = new ApiError();
 
         EmployeeRepositoryResponse createEmployeeResult =
             await _unitOfWork.EmployeeRepository.CreateEmployeeAsync(createEmployeeDto);
 
         if (!createEmployeeResult.IsSuccess)
         {
-            return BadRequest(createEmployeeResult);
+            error.ErrorCode = BadRequest().StatusCode;
+            error.ErrorMessage = createEmployeeResult.Message;
+            return BadRequest(error);
         }
 
         Employee employee = createEmployeeResult.Employee;
@@ -75,10 +85,13 @@ public class EmployeeController : ApiController
     {
         EmployeeRepositoryResponse removeEmployeeResult =
             await _unitOfWork.EmployeeRepository.RemoveEmployeeAsync(id);
+        ApiError error = new ApiError();
 
         if (!removeEmployeeResult.IsSuccess)
         {
-            return NotFound(removeEmployeeResult);
+            error.ErrorCode = NotFound().StatusCode;
+            error.ErrorMessage = removeEmployeeResult.Message;
+            return NotFound(error);
         }
 
         return Ok();
@@ -88,13 +101,16 @@ public class EmployeeController : ApiController
     public async Task<IActionResult> RefreshEmployee(RefreshEmployeeInputModel refreshEmployeeInputModel)
     {
         RefreshEmployeeDto refreshEmployeeDto = _mapper.Map<RefreshEmployeeDto>(refreshEmployeeInputModel);
+        ApiError error = new ApiError();
 
         EmployeeRepositoryResponse refreshEmployeeResult =
             await _unitOfWork.EmployeeRepository.RefreshEmployeeDataAsync(refreshEmployeeDto);
 
         if (!refreshEmployeeResult.IsSuccess)
         {
-            return BadRequest(refreshEmployeeResult);
+            error.ErrorCode = BadRequest().StatusCode;
+            error.ErrorMessage = refreshEmployeeResult.Message;
+            return BadRequest(error);
         }
 
         Employee employee = refreshEmployeeResult.Employee;
