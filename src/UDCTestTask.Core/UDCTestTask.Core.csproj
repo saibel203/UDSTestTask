@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Auxiliary\" />
+    <Folder Include="Responses\Repositories\" />
+  </ItemGroup>
+
 </Project>
