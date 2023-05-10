@@ -7,7 +7,7 @@ import * as alertify from 'alertifyjs';
 export class AlertifyService {
   constructor() { }
 
-  alertifySettings = alertify.set('notifier','position', 'top-right');
+  alertifySettings = alertify.set('notifier', 'position', 'top-right');
 
   success(message: string): void {
     alertify.success(message);

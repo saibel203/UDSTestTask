@@ -12,15 +12,18 @@ import { EmployeeWindowComponent } from './components/employee-window/employee-w
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AlertifyService } from './services/alertify.service';
+import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
 
 const appRoutes: Routes = [
-  { path: '', component: EmployeeWindowComponent }
+  { path: '', component: EmployeeWindowComponent },
+  { path: 'employee-details/:id', component: EmployeeDetailsComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    EmployeeWindowComponent
+    EmployeeWindowComponent,
+    EmployeeDetailsComponent
   ],
   imports: [
     BrowserModule,

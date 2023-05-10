@@ -18,10 +18,14 @@ export class EmployeeWindowComponent {
   employee?: IEmployee;
   employees?: IEmployee[];
   newEmployeeForm?: FormGroup;
+  refreshEmployeeForm?: FormGroup;
+  selectedEmployeeId?: number;
   isNewEmployeeFormSubmitted?: boolean;
+  isRefreshEmployeeFormSubmitted?: boolean;
 
   ngOnInit(): void {
     this.createNewEmployeeForm();
+    this.createRefreshEmployeeForm();
     this.allEmployees();
   }
 
@@ -66,13 +70,22 @@ export class EmployeeWindowComponent {
     });
   }
 
-  onSubmit() {
+  createRefreshEmployeeForm(): void {
+    this.refreshEmployeeForm = this.fb.group({
+      refreshFirstName: [this.employee?.firstName, [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
+      refreshLastName: [this.employee?.lastName, [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
+      refreshGender: [this.employee?.gender, [Validators.required, Validators.minLength(3), Validators.maxLength(7)]],
+      refreshCity: [this.employee?.city, [Validators.required, Validators.minLength(5), Validators.maxLength(50)]]
+    });
+  }
+
+  onSubmit(): void {
     this.isNewEmployeeFormSubmitted = true;
 
     if (this.newEmployeeForm?.valid) {
       this.employeeService.createEmployee(this.userData()).subscribe(
         () => {
-          this.alertifyService.message('The employee has been successfully created');
+          this.alertifyService.success('The employee has been successfully created');
           this.onReset();
           this.modalRef?.hide();
           this.allEmployees();
@@ -81,9 +94,30 @@ export class EmployeeWindowComponent {
     }
   }
 
-  onReset() {
+  onReset(): void {
     this.isNewEmployeeFormSubmitted = false;
     this.newEmployeeForm?.reset();
+  }
+
+  onRefreshSubmit(): void {
+    this.isRefreshEmployeeFormSubmitted = true;
+
+    if (this.refreshEmployeeForm?.valid) {
+      this.employeeService.refreshEmployeeData(this.employee!).subscribe(
+        () => {
+          if (this.employee?.employeeId === 0)
+            this.alertifyService.error('Користувача не обрано!');
+          this.alertifyService.success('The employee has been successfully created');
+          this.modalRef?.hide();
+          this.allEmployees();
+        }
+      )
+    }
+  }
+
+  onRefreshReset(): void {
+    this.isRefreshEmployeeFormSubmitted = false;
+    this.refreshEmployeeForm?.reset();
   }
 
   userData(): IEmployee {
@@ -94,6 +128,17 @@ export class EmployeeWindowComponent {
       gender: this.gender?.value,
       city: this.city?.value
     };
+  }
+
+  getCurrentUserData(id: number) {
+    this.selectedEmployeeId = id;
+    this.employeeService.getEmployeeById(id).subscribe(
+      (employeeData: IEmployee) => {
+        console.log(employeeData);
+        this.employee = employeeData;
+        this.createRefreshEmployeeForm();
+      }
+    );
   }
 
   // ------------------------------------
@@ -111,5 +156,18 @@ export class EmployeeWindowComponent {
   }
   get city() {
     return this.newEmployeeForm?.get('city') as FormControl;
+  }
+
+  get refreshFirstName() {
+    return this.refreshEmployeeForm?.get('firstName') as FormControl;
+  }
+  get refreshLastName() {
+    return this.refreshEmployeeForm?.get('lastName') as FormControl;
+  }
+  get refreshGender() {
+    return this.refreshEmployeeForm?.get('gender') as FormControl;
+  }
+  get refreshCity() {
+    return this.refreshEmployeeForm?.get('city') as FormControl;
   }
 }

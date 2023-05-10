@@ -12,6 +12,25 @@ a {
   text-decoration: none !important;
 }
 
+textarea:hover,
+input:hover,
+textarea:active,
+input:active,
+textarea:focus,
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+select:focus,
+select:active,
+select:hover,
+.btn:active,
+.btn.active {
+  outline: 0px !important;
+  box-shadow: none !important;
+}
+
 .container {
   max-width: 1300px;
   margin: 50px auto;
