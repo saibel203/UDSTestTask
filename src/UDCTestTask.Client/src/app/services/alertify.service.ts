@@ -24,4 +24,11 @@ export class AlertifyService {
   message(message: string): void {
     alertify.message(message);
   }
+
+  confirm(message: string, acceptFunction: Function, cancelMessage: string): void {
+    alertify.confirm(message, acceptFunction,
+      () => {
+        this.success(cancelMessage);
+      });
+  }
 }

@@ -125,10 +125,13 @@ public class EmployeeRepository : GenericRepository<Employee>, IEmployeeReposito
             DbSet.Remove(employee);
             await DbContext.SaveChangesAsync();
 
+            IEnumerable<Employee> employees = await DbSet.ToListAsync();
+
             return new EmployeeRepositoryResponse
             {
                 Message = "The user with this ID was successfully deleted",
-                IsSuccess = true
+                IsSuccess = true,
+                Employees = employees
             };
         }
         catch (Exception ex)

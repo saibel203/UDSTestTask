@@ -27,9 +27,9 @@ export class EmployeeService {
     return this.http.post<IEmployee>(fullPath, employee);
   }
 
-  removeEmployee(employeeId: number): Observable<void> {
+  removeEmployee(employeeId: number): Observable<IEmployee[]> {
     const fullPath: string = this.apiWebPath + '/employee/remove/' + employeeId;
-    return this.http.delete<void>(fullPath);
+    return this.http.delete<IEmployee[]>(fullPath);
   }
 
   refreshEmployeeData(employee: IEmployee): Observable<IEmployee> {

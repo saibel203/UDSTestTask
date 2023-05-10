@@ -1,5 +1,6 @@
 import { Component, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { IEmployee } from 'src/app/models/IEmployee.interface';
 import { AlertifyService } from 'src/app/services/alertify.service';
@@ -12,7 +13,7 @@ import { EmployeeService } from 'src/app/services/employee.service';
 })
 export class EmployeeWindowComponent {
   constructor(private employeeService: EmployeeService, private modalService: BsModalService,
-    private fb: FormBuilder, private alertifyService: AlertifyService) { }
+    private fb: FormBuilder, private alertifyService: AlertifyService, private router: Router) { }
 
   modalRef?: BsModalRef;
   employee?: IEmployee;
@@ -24,6 +25,7 @@ export class EmployeeWindowComponent {
   isRefreshEmployeeFormSubmitted?: boolean;
 
   ngOnInit(): void {
+    this.restoreDataByPath();
     this.createNewEmployeeForm();
     this.createRefreshEmployeeForm();
     this.allEmployees();
@@ -35,18 +37,6 @@ export class EmployeeWindowComponent {
         this.employees = employeesData;
       }
     );
-  }
-
-  getEmployeeById(employeeId: number) {
-    this.employeeService.getEmployeeById(employeeId).subscribe(
-      (employeeData: IEmployee) => {
-        console.log(employeeData);
-      }
-    );
-  }
-
-  removeEmployee(employeeId: number) {
-    this.employeeService.removeEmployee(employeeId).subscribe();
   }
 
   refreshEmployeeData(employeeData: IEmployee) {
@@ -101,12 +91,14 @@ export class EmployeeWindowComponent {
 
   onRefreshSubmit(): void {
     this.isRefreshEmployeeFormSubmitted = true;
+    console.log(this.refreshUserData());
 
     if (this.refreshEmployeeForm?.valid) {
-      this.employeeService.refreshEmployeeData(this.employee!).subscribe(
+      this.employeeService.refreshEmployeeData(this.refreshUserData()).subscribe(
         () => {
           if (this.employee?.employeeId === 0)
             this.alertifyService.error('Користувача не обрано!');
+
           this.alertifyService.success('The employee has been successfully created');
           this.modalRef?.hide();
           this.allEmployees();
@@ -120,6 +112,20 @@ export class EmployeeWindowComponent {
     this.refreshEmployeeForm?.reset();
   }
 
+  onDeleteEmployee(id: number): void {
+    this.alertifyService.confirm('Are you sure you want to delete the employee?',
+      () => {
+        this.employeeService.removeEmployee(id).subscribe(
+          (data: IEmployee[]) => {
+            this.employees = data;
+          }
+        );
+        this.alertifyService.success('The employee was successfully deleted');
+        this.restoreData();
+      },
+      'The remove of the employee has been canceled');
+  }
+
   userData(): IEmployee {
     return this.employee = {
       employeeId: 0,
@@ -127,6 +133,16 @@ export class EmployeeWindowComponent {
       lastName: this.lastName?.value,
       gender: this.gender?.value,
       city: this.city?.value
+    };
+  }
+
+  refreshUserData(): IEmployee {
+    return this.employee = {
+      employeeId: this.selectedEmployeeId,
+      firstName: this.refreshFirstName?.value,
+      lastName: this.refreshLastName?.value,
+      gender: this.refreshGender?.value,
+      city: this.refreshCity?.value
     };
   }
 
@@ -139,6 +155,22 @@ export class EmployeeWindowComponent {
         this.createRefreshEmployeeForm();
       }
     );
+  }
+
+  restoreDataByPath(): void {
+    if (this.employee === undefined) {
+      let pathString = +window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+
+      if (pathString !== 0) {
+        this.getCurrentUserData(pathString);
+      }
+    }
+  }
+
+  restoreData(): void {
+    this.router.navigate(['/']);
+    this.employee = null!;
+    this.onRefreshReset();
   }
 
   // ------------------------------------
@@ -159,15 +191,15 @@ export class EmployeeWindowComponent {
   }
 
   get refreshFirstName() {
-    return this.refreshEmployeeForm?.get('firstName') as FormControl;
+    return this.refreshEmployeeForm?.get('refreshFirstName') as FormControl;
   }
   get refreshLastName() {
-    return this.refreshEmployeeForm?.get('lastName') as FormControl;
+    return this.refreshEmployeeForm?.get('refreshLastName') as FormControl;
   }
   get refreshGender() {
-    return this.refreshEmployeeForm?.get('gender') as FormControl;
+    return this.refreshEmployeeForm?.get('refreshGender') as FormControl;
   }
   get refreshCity() {
-    return this.refreshEmployeeForm?.get('city') as FormControl;
+    return this.refreshEmployeeForm?.get('refreshCity') as FormControl;
   }
 }

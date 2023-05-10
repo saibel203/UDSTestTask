@@ -94,7 +94,9 @@ public class EmployeeController : ApiController
             return NotFound(error);
         }
 
-        return Ok();
+        IEnumerable<Employee> employees = removeEmployeeResult.Employees;
+
+        return Ok(employees);
     }
 
     [HttpPut("refresh")] // /api/employee/refresh

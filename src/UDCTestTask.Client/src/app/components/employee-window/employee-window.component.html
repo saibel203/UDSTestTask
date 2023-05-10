@@ -4,9 +4,9 @@
       <div class="employees__sidebar">
         <h3 class="employees__sidebar-header">List of Employees</h3>
         <div class="employees__sidebar-buttons">
-          <button type="button" class="btn" (click)="openModal(createEmployee)">Add</button>
-          <button class="btn" (click)="openModal(refreshEmployeeData)">Edit</button>
-          <button class="btn">Delete</button>
+          <button type="button" class="btn btn-add" (click)="openModal(createEmployee)">Add</button>
+          <button class="btn btn-edit" (click)="openModal(refreshEmployeeData)">Edit</button>
+          <button class="btn btn-remove" (click)="onDeleteEmployee(selectedEmployeeId!)">Delete</button>
         </div>
         <div class="employees__sidebar-list">
           <a *ngFor="let employee of employees" class="employees__sidebar-list-item"
