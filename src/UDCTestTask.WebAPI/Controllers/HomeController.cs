@@ -7,6 +7,9 @@ public class HomeController : ApiController
     [HttpGet("test")] // /api/home/test
     public IActionResult Test()
     {
-        return Ok("Hello world!");
+        return Ok(new
+        {
+            Message = "Hello world!"
+        });
     }
 }

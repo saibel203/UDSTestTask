@@ -1,0 +1,18 @@
+<div class="employees">
+  <div class="container">
+    <div class="employees__sidebar">
+      <h3 class="employees__sidebar-header">List of Employees</h3>
+      <div class="employees__sidebar-buttons">
+        <button class="btn">Add</button>
+        <button class="btn">Edit</button>
+        <button class="btn">Delete</button>
+      </div>
+      <div class="employees__sidebar-list">
+        <a *ngFor="let employee of employees" class="employees__sidebar-list-item">
+          {{ employee?.lastName }} {{ employee?.firstName }}
+        </a>
+      </div>
+    </div>
+    <div class="employees__content"></div>
+  </div>
+</div>
