@@ -1,0 +1,12 @@
+@import './assets/scss/reset.scss';
+@import './assets/scss/base.scss';
+@import './assets/scss/forms.scss';
+
+@import './../node_modules/alertifyjs/build/css/alertify.min.css';
+@import './../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
+
+/* Importing Bootstrap SCSS file. */
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+/* Importing Datepicker SCSS file. */
+@import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";

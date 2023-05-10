@@ -3,7 +3,7 @@
     <div class="employees__sidebar">
       <h3 class="employees__sidebar-header">List of Employees</h3>
       <div class="employees__sidebar-buttons">
-        <button class="btn">Add</button>
+        <button type="button" class="btn" (click)="openModal(createEmployee)">Add</button>
         <button class="btn">Edit</button>
         <button class="btn">Delete</button>
       </div>
@@ -13,6 +13,93 @@
         </a>
       </div>
     </div>
-    <div class="employees__content"></div>
+    <div class="employees__content">
+
+    </div>
+
+    <ng-template #createEmployee>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Create a new user</h4>
+        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+          <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form *ngIf="newEmployeeForm" [formGroup]="newEmployeeForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="firstName" class="form-label">First name</label>
+            <input type="text" class="form-control" formControlName="firstName">
+
+            <span *ngIf="!firstName?.valid && (firstName?.touched || isNewEmployeeFormSubmitted)"
+                class="form-error-block">
+              <span *ngIf="firstName?.errors?.['required']">
+                The 'First name' field is mandatory
+              </span>
+              <span *ngIf="firstName?.errors?.['minlength']">
+                The length of the field must exceed 5 characters
+              </span>
+              <span *ngIf="firstName?.errors?.['maxlength']">
+                The length of the field should not exceed 20 characters
+              </span>
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="lastName" class="form-label">Last name</label>
+            <input type="text" class="form-control" formControlName="lastName">
+
+            <span *ngIf="!lastName?.valid && (lastName?.touched || isNewEmployeeFormSubmitted)"
+                class="form-error-block">
+              <span *ngIf="lastName?.errors?.['required']">
+                The 'Last name' field is mandatory
+              </span>
+              <span *ngIf="lastName?.errors?.['minlength']">
+                The length of the field must exceed 5 characters
+              </span>
+              <span *ngIf="lastName?.errors?.['maxlength']">
+                The length of the field should not exceed 20 characters
+              </span>
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            <input type="text" class="form-control" formControlName="gender">
+
+            <span *ngIf="!gender?.valid && (gender?.touched || isNewEmployeeFormSubmitted)"
+                class="form-error-block">
+              <span *ngIf="gender?.errors?.['required']">
+                The 'Gender' field is mandatory
+              </span>
+              <span *ngIf="gender?.errors?.['minlength']">
+                The length of the field must exceed 3 characters
+              </span>
+              <span *ngIf="gender?.errors?.['maxlength']">
+                The length of the field should not exceed 7 characters
+              </span>
+            </span>
+          </div>
+          <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" formControlName="city">
+
+            <span *ngIf="!city?.valid && (city?.touched || isNewEmployeeFormSubmitted)"
+                class="form-error-block">
+              <span *ngIf="city?.errors?.['required']">
+                The 'City' field is mandatory
+              </span>
+              <span *ngIf="city?.errors?.['minlength']">
+                The length of the field must exceed 5 characters
+              </span>
+              <span *ngIf="city?.errors?.['maxlength']">
+                The length of the field should not exceed 50 characters
+              </span>
+            </span>
+          </div>
+          <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Create Employee</button>
+            <button type="reset" class="btn btn-danger">Cancle</button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
   </div>
 </div>

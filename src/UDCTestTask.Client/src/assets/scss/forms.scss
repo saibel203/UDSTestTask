@@ -1,0 +1,11 @@
+.ng-invalid.ng-touched {
+  border-color: red;
+}
+
+.form-error-block {
+  color: red;
+
+  span {
+    display: block;
+  }
+}
