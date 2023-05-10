@@ -20,7 +20,7 @@ export class EmployeeWindowComponent {
   employees?: IEmployee[];
   newEmployeeForm?: FormGroup;
   refreshEmployeeForm?: FormGroup;
-  selectedEmployeeId?: number;
+  selectedEmployeeId: number = 0;
   isNewEmployeeFormSubmitted?: boolean;
   isRefreshEmployeeFormSubmitted?: boolean;
 
@@ -92,18 +92,18 @@ export class EmployeeWindowComponent {
   onRefreshSubmit(): void {
     this.isRefreshEmployeeFormSubmitted = true;
     console.log(this.refreshUserData());
+    console.log(this.selectedEmployeeId);
 
-    if (this.refreshEmployeeForm?.valid) {
+    if (this.refreshEmployeeForm?.valid && this.selectedEmployeeId !== 0) {
       this.employeeService.refreshEmployeeData(this.refreshUserData()).subscribe(
         () => {
-          if (this.employee?.employeeId === 0)
-            this.alertifyService.error('Користувача не обрано!');
-
-          this.alertifyService.success('The employee has been successfully created');
+          this.alertifyService.success('The employee has been successfully refreshed');
           this.modalRef?.hide();
           this.allEmployees();
         }
       )
+    } else {
+      this.alertifyService.error('First select an employee');
     }
   }
 
@@ -118,10 +118,10 @@ export class EmployeeWindowComponent {
         this.employeeService.removeEmployee(id).subscribe(
           (data: IEmployee[]) => {
             this.employees = data;
+            this.alertifyService.success('The employee was successfully deleted');
+            this.restoreData();
           }
         );
-        this.alertifyService.success('The employee was successfully deleted');
-        this.restoreData();
       },
       'The remove of the employee has been canceled');
   }
