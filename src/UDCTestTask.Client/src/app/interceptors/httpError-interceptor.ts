@@ -3,13 +3,14 @@ import { Injectable } from "@angular/core";
 import { catchError, concatMap, Observable, of, retryWhen, throwError } from "rxjs";
 import { ErrorCode } from "../enums/ErrorCode.enum";
 import { AlertifyService } from "../services/alertify.service";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpErrorInterceptor implements HttpInterceptor {
 
-  constructor(private alertify: AlertifyService) {}
+  constructor(private alertify: AlertifyService, private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
@@ -55,6 +56,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       if (!error.error.errorMessage && error.error && error.status !== ErrorCode.serverDown) {
         { errorMessage = error.error; }
       }
+
+      this.router.navigate(['/']);
     }
 
     return errorMessage;

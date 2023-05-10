@@ -74,18 +74,16 @@
           </div>
           <div class="mb-3">
             <label for="gender" class="form-label">Gender</label>
-            <input type="text" class="form-control" formControlName="gender" placeholder="Male">
+            <select formControlName="gender" class="form-select">
+              <option value="default" selected disabled>Choose gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
 
-            <span *ngIf="!gender?.valid && (gender?.touched || isNewEmployeeFormSubmitted)" class="form-error-block">
-              <span *ngIf="gender?.errors?.['required']">
-                The 'Gender' field is mandatory
-              </span>
-              <span *ngIf="gender?.errors?.['minlength']">
-                The length of the field must exceed 3 characters
-              </span>
-              <span *ngIf="gender?.errors?.['maxlength']">
-                The length of the field should not exceed 7 characters
-              </span>
+            <span
+              *ngIf="(!gender?.valid && (gender?.touched || isNewEmployeeFormSubmitted) || ((isNewEmployeeFormSubmitted || gender?.touched) && gender?.value === 'default'))"
+              class="form-error-block">
+              The 'Gender' field is mandatory
             </span>
           </div>
           <div class="mb-3">
@@ -105,7 +103,7 @@
             </span>
           </div>
           <div class="mb-3 btn-group">
-            <button type="submit" class="btn btn-primary">Create Employee</button>
+            <button [disabled]="!newEmployeeForm.valid" type="submit" class="btn btn-primary">Create Employee</button>
             <button type="reset" class="btn btn-danger">Cancle</button>
           </div>
         </form>
@@ -159,20 +157,16 @@
           </div>
           <div class="mb-3">
             <label for="refreshGender" class="form-label">Gender</label>
-            <input type="text" class="form-control" formControlName="refreshGender" placeholder="Male"
-              [value]="employee?.gender">
+            <select formControlName="refreshGender" class="form-select">
+              <option value="default" selected disabled>Choose gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
 
-            <span *ngIf="!refreshGender?.valid && (refreshGender?.touched || isRefreshEmployeeFormSubmitted)"
+            <span
+              *ngIf="(!refreshGender?.valid && (refreshGender?.touched || isRefreshEmployeeFormSubmitted) || ((isRefreshEmployeeFormSubmitted || refreshGender?.touched) && refreshGender?.value === 'default'))"
               class="form-error-block">
-              <span *ngIf="refreshGender?.errors?.['required']">
-                The 'Gender' field is mandatory
-              </span>
-              <span *ngIf="refreshGender?.errors?.['minlength']">
-                The length of the field must exceed 3 characters
-              </span>
-              <span *ngIf="refreshGender?.errors?.['maxlength']">
-                The length of the field should not exceed 7 characters
-              </span>
+              The 'Gender' field is mandatory
             </span>
           </div>
           <div class="mb-3">
@@ -194,7 +188,7 @@
             </span>
           </div>
           <div class="mb-3 btn-group">
-            <button type="submit" class="btn btn-primary">Refresh Employee Data</button>
+            <button [disabled]="!refreshEmployeeForm.valid" type="submit" class="btn btn-primary">Refresh Employee Data</button>
             <button type="reset" class="btn btn-danger">Cancle</button>
           </div>
         </form>

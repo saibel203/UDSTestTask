@@ -23,6 +23,7 @@ export class EmployeeWindowComponent {
   selectedEmployeeId: number = 0;
   isNewEmployeeFormSubmitted?: boolean;
   isRefreshEmployeeFormSubmitted?: boolean;
+  selectedGender: string = 'default';
 
   ngOnInit(): void {
     this.restoreDataByPath();
@@ -55,7 +56,7 @@ export class EmployeeWindowComponent {
     this.newEmployeeForm = this.fb.group({
       firstName: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
       lastName: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
-      gender: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(7)]],
+      gender: ['default', [Validators.required, Validators.minLength(3), Validators.maxLength(7)]],
       city: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(50)]]
     });
   }
@@ -94,7 +95,7 @@ export class EmployeeWindowComponent {
     console.log(this.refreshUserData());
     console.log(this.selectedEmployeeId);
 
-    if (this.refreshEmployeeForm?.valid && this.selectedEmployeeId !== 0) {
+    if (this.refreshEmployeeForm?.valid && this.employee?.employeeId !== 0) {
       this.employeeService.refreshEmployeeData(this.refreshUserData()).subscribe(
         () => {
           this.alertifyService.success('The employee has been successfully refreshed');
@@ -104,6 +105,9 @@ export class EmployeeWindowComponent {
       )
     } else {
       this.alertifyService.error('First select an employee');
+      this.modalRef?.hide();
+      this.onRefreshReset();
+      this.employee = null!;
     }
   }
 
@@ -150,7 +154,6 @@ export class EmployeeWindowComponent {
     this.selectedEmployeeId = id;
     this.employeeService.getEmployeeById(id).subscribe(
       (employeeData: IEmployee) => {
-        console.log(employeeData);
         this.employee = employeeData;
         this.createRefreshEmployeeForm();
       }
@@ -170,6 +173,7 @@ export class EmployeeWindowComponent {
   restoreData(): void {
     this.router.navigate(['/']);
     this.employee = null!;
+    this.selectedEmployeeId = 0;
     this.onRefreshReset();
   }
 
