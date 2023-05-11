@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AlertifyService } from './services/alertify.service';
 import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
 import { HttpErrorInterceptor } from './interceptors/httpError-interceptor';
+import { EmployeeFormsComponent } from './components/employee-forms/employee-forms.component';
 
 const appRoutes: Routes = [
   { path: '', component: EmployeeWindowComponent },
@@ -24,7 +25,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     EmployeeWindowComponent,
-    EmployeeDetailsComponent
+    EmployeeDetailsComponent,
+    EmployeeFormsComponent
   ],
   imports: [
     BrowserModule,

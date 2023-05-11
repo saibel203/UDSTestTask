@@ -4,8 +4,9 @@
       <div class="employees__sidebar">
         <h3 class="employees__sidebar-header">List of Employees</h3>
         <div class="employees__sidebar-buttons">
-          <button type="button" class="btn btn-add" (click)="openModal(createEmployee)">Add</button>
-          <button class="btn btn-edit" (click)="openModal(refreshEmployeeData)">Edit</button>
+          <button type="button" class="btn btn-add"
+            (click)="openModal(childFormComponent.createEmployeeTempate)">Add</button>
+          <button class="btn btn-edit" (click)="openModal(childFormComponent.reafreshEmployeeTempate)">Edit</button>
           <button class="btn btn-remove" (click)="onDeleteEmployee(selectedEmployeeId!)">Delete</button>
         </div>
         <div class="employees__sidebar-list">
@@ -21,178 +22,12 @@
           <h3>Employee details</h3>
         </div>
         <div class="employees__content-content">
-          <p>First name: {{ employee?.firstName }}</p>
-          <p>Last name: {{ employee?.lastName }}</p>
-          <p>Gender: {{ employee?.gender }}</p>
-          <p>City: {{ employee?.city }}</p>
+          <app-employee-details [employeeId]="selectedEmployeeId" *ngIf="employee"></app-employee-details>
         </div>
       </div>
     </div>
 
-    <ng-template #createEmployee>
-      <div class="modal-header">
-        <h4 class="modal-title pull-left">Create a new employee</h4>
-        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-          <span aria-hidden="true" class="visually-hidden">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form *ngIf="newEmployeeForm" [formGroup]="newEmployeeForm" (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label for="firstName" class="form-label">First name</label>
-            <input type="text" class="form-control" formControlName="firstName" placeholder="Anatoly">
-
-            <span *ngIf="!firstName?.valid && (firstName?.touched || isNewEmployeeFormSubmitted)"
-              class="form-error-block">
-              <span *ngIf="firstName?.errors?.['required']">
-                The 'First name' field is mandatory
-              </span>
-              <span *ngIf="firstName?.errors?.['minlength']">
-                The length of the field must exceed 5 characters
-              </span>
-              <span *ngIf="firstName?.errors?.['maxlength']">
-                The length of the field should not exceed 20 characters
-              </span>
-            </span>
-          </div>
-          <div class="mb-3">
-            <label for="lastName" class="form-label">Last name</label>
-            <input type="text" class="form-control" formControlName="lastName" placeholder="Posednyak">
-
-            <span *ngIf="!lastName?.valid && (lastName?.touched || isNewEmployeeFormSubmitted)"
-              class="form-error-block">
-              <span *ngIf="lastName?.errors?.['required']">
-                The 'Last name' field is mandatory
-              </span>
-              <span *ngIf="lastName?.errors?.['minlength']">
-                The length of the field must exceed 5 characters
-              </span>
-              <span *ngIf="lastName?.errors?.['maxlength']">
-                The length of the field should not exceed 20 characters
-              </span>
-            </span>
-          </div>
-          <div class="mb-3">
-            <label for="gender" class="form-label">Gender</label>
-            <select formControlName="gender" class="form-select">
-              <option value="default" selected disabled>Choose gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-
-            <span
-              *ngIf="(!gender?.valid && (gender?.touched || isNewEmployeeFormSubmitted) || ((isNewEmployeeFormSubmitted || gender?.touched) && gender?.value === 'default'))"
-              class="form-error-block">
-              The 'Gender' field is mandatory
-            </span>
-          </div>
-          <div class="mb-3">
-            <label for="city" class="form-label">City</label>
-            <input type="text" class="form-control" formControlName="city" placeholder="Kyiv">
-
-            <span *ngIf="!city?.valid && (city?.touched || isNewEmployeeFormSubmitted)" class="form-error-block">
-              <span *ngIf="city?.errors?.['required']">
-                The 'City' field is mandatory
-              </span>
-              <span *ngIf="city?.errors?.['minlength']">
-                The length of the field must exceed 5 characters
-              </span>
-              <span *ngIf="city?.errors?.['maxlength']">
-                The length of the field should not exceed 50 characters
-              </span>
-            </span>
-          </div>
-          <div class="mb-3 btn-group">
-            <button [disabled]="!newEmployeeForm.valid" type="submit" class="btn btn-primary">Create Employee</button>
-            <button type="reset" class="btn btn-danger">Cancle</button>
-          </div>
-        </form>
-      </div>
-    </ng-template>
-
-    <ng-template #refreshEmployeeData>
-      <div class="modal-header">
-        <h4 class="modal-title pull-left">Refresh employee data</h4>
-        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-          <span aria-hidden="true" class="visually-hidden">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form *ngIf="refreshEmployeeForm" [formGroup]="refreshEmployeeForm" (ngSubmit)="onRefreshSubmit()">
-          <div class="mb-3">
-            <label for="refreshFirstName" class="form-label">First name</label>
-            <input type="text" class="form-control" formControlName="refreshFirstName" placeholder="Anatoly"
-              [value]="employee?.firstName">
-
-            <span *ngIf="!refreshFirstName?.valid && (refreshFirstName?.touched || isRefreshEmployeeFormSubmitted)"
-              class="form-error-block">
-              <span *ngIf="refreshFirstName?.errors?.['required']">
-                The 'First name' field is mandatory
-              </span>
-              <span *ngIf="refreshFirstName?.errors?.['minlength']">
-                The length of the field must exceed 5 characters
-              </span>
-              <span *ngIf="refreshFirstName?.errors?.['maxlength']">
-                The length of the field should not exceed 20 characters
-              </span>
-            </span>
-          </div>
-          <div class="mb-3">
-            <label for="refreshLastName" class="form-label">Last name</label>
-            <input type="text" class="form-control" formControlName="refreshLastName" placeholder="Posednyak"
-              [value]="employee?.lastName">
-
-            <span *ngIf="!refreshLastName?.valid && (refreshLastName?.touched || isRefreshEmployeeFormSubmitted)"
-              class="form-error-block">
-              <span *ngIf="refreshLastName?.errors?.['required']">
-                The 'Last name' field is mandatory
-              </span>
-              <span *ngIf="refreshLastName?.errors?.['minlength']">
-                The length of the field must exceed 5 characters
-              </span>
-              <span *ngIf="refreshLastName?.errors?.['maxlength']">
-                The length of the field should not exceed 20 characters
-              </span>
-            </span>
-          </div>
-          <div class="mb-3">
-            <label for="refreshGender" class="form-label">Gender</label>
-            <select formControlName="refreshGender" class="form-select">
-              <option value="default" selected disabled>Choose gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-
-            <span
-              *ngIf="(!refreshGender?.valid && (refreshGender?.touched || isRefreshEmployeeFormSubmitted) || ((isRefreshEmployeeFormSubmitted || refreshGender?.touched) && refreshGender?.value === 'default'))"
-              class="form-error-block">
-              The 'Gender' field is mandatory
-            </span>
-          </div>
-          <div class="mb-3">
-            <label for="refreshCity" class="form-label">City</label>
-            <input type="text" class="form-control" formControlName="refreshCity" placeholder="Kyiv"
-              [value]="employee?.city">
-
-            <span *ngIf="!refreshCity?.valid && (refreshCity?.touched || isRefreshEmployeeFormSubmitted)"
-              class="form-error-block">
-              <span *ngIf="refreshCity?.errors?.['required']">
-                The 'City' field is mandatory
-              </span>
-              <span *ngIf="refreshCity?.errors?.['minlength']">
-                The length of the field must exceed 5 characters
-              </span>
-              <span *ngIf="refreshCity?.errors?.['maxlength']">
-                The length of the field should not exceed 50 characters
-              </span>
-            </span>
-          </div>
-          <div class="mb-3 btn-group">
-            <button [disabled]="!refreshEmployeeForm.valid" type="submit" class="btn btn-primary">Refresh Employee Data</button>
-            <button type="reset" class="btn btn-danger">Cancle</button>
-          </div>
-        </form>
-      </div>
-    </ng-template>
+    <app-employee-forms (employeesToParent)="getEmployeesListAfterFormAction($event)" [modalRef]="modalRef"
+      [employee]="employee" [selectedEmployeeId]="selectedEmployeeId"></app-employee-forms>
   </div>
 </div>
